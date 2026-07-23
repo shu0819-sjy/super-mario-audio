@@ -31,18 +31,23 @@ const BEAT = 60 / BPM;
  * 返回值：带颜色的 Curve。
  * 边界情况：time 超过歌曲长度时仍可生成稳定的循环画面。
  */
+let syncedCurveTime = 0;
+
+function syncedCurve(t) {
+  const beatNumber = syncedCurveTime / BEAT;
+  const x = 2 * t - 1;
+  const mainWave = 0.16 * math_sin(2 * math_PI * (4 * t + beatNumber / 8));
+  const rhythmWave = 0.07 * math_sin(2 * math_PI * (16 * t - beatNumber));
+  const y = mainWave + rhythmWave;
+  const red = 210 + 45 * math_sin(2 * math_PI * (t + beatNumber / 16));
+  const green = 90 + 100 * math_sin(2 * math_PI * (t + beatNumber / 20));
+  const blue = 40 + 100 * math_sin(2 * math_PI * (t + beatNumber / 24));
+  return make_color_point(x, y, red, green, blue);
+}
+
 function syncedCurveAtTime(time) {
-  return function (t) {
-    const beatNumber = time / BEAT;
-    const x = 2 * t - 1;
-    const mainWave = 0.16 * math_sin(2 * math_PI * (4 * t + beatNumber / 8));
-    const rhythmWave = 0.07 * math_sin(2 * math_PI * (16 * t - beatNumber));
-    const y = mainWave + rhythmWave;
-    const red = 210 + 45 * math_sin(2 * math_PI * (t + beatNumber / 16));
-    const green = 90 + 100 * math_sin(2 * math_PI * (t + beatNumber / 20));
-    const blue = 40 + 100 * math_sin(2 * math_PI * (t + beatNumber / 24));
-    return make_color_point(x, y, red, green, blue);
-  };
+  syncedCurveTime = time;
+  return syncedCurve;
 }
 
 /**
