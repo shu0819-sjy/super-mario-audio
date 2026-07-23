@@ -9,6 +9,8 @@ import {
   update_scale,
   query_position,
   input_key_down,
+  input_left_mouse_down,
+  pointer_over_gameobject,
   update_loop,
   build_game,
   set_fps,
@@ -169,6 +171,18 @@ const overlayPanel = update_color(
   update_position(create_rectangle(650, 300), [480, 285]),
   [18, 27, 42, 245]
 );
+const overlayButton1 = update_color(
+  update_position(create_rectangle(360, 38), [480, 325]),
+  [255, 255, 255, 0]
+);
+const overlayButton2 = update_color(
+  update_position(create_rectangle(360, 38), [480, 365]),
+  [255, 255, 255, 0]
+);
+const overlayButton3 = update_color(
+  update_position(create_rectangle(360, 38), [480, 405]),
+  [255, 255, 255, 0]
+);
 const overlayTitle = update_position(create_text(''), [480, 205]);
 const overlayBody = update_position(create_text(''), [480, 260]);
 const overlayChoice1 = update_position(create_text(''), [480, 325]);
@@ -198,6 +212,7 @@ let pauseKeyWasDown = false;
 let fireKeyWasDown = false;
 let resetKeyWasDown = false;
 let levelSelectKeyWasDown = false;
+let restartClickWasDown = false;
 let playerVisualFrame = 0;
 let currentLevel = 1;
 
@@ -859,6 +874,7 @@ function handleInput() {
   const level1 = input_key_down('1');
   const level2 = input_key_down('2');
   const level3 = input_key_down('3');
+  const mouseDown = input_left_mouse_down();
   if (openLevelSelect && !levelSelectKeyWasDown && gameState[STATE_MODE] !== MODE_LEVEL_SELECT) {
     openLevelSelection();
   }
@@ -871,6 +887,14 @@ function handleInput() {
     } else if (level3) {
       chooseLevel(3);
     }
+    if (mouseDown && !restartClickWasDown && pointer_over_gameobject(overlayButton1)) {
+      chooseLevel(1);
+    } else if (mouseDown && !restartClickWasDown && pointer_over_gameobject(overlayButton2)) {
+      chooseLevel(2);
+    } else if (mouseDown && !restartClickWasDown && pointer_over_gameobject(overlayButton3)) {
+      chooseLevel(3);
+    }
+    restartClickWasDown = mouseDown;
     return undefined;
   }
   if (pause && !pauseKeyWasDown && gameState[STATE_MODE] === 'playing') {
@@ -884,6 +908,17 @@ function handleInput() {
   if ((gameState[STATE_MODE] === MODE_DEAD || gameState[STATE_MODE] === MODE_WIN || gameState[STATE_MODE] === MODE_GAME_OVER) && reset && !resetKeyWasDown) {
     restartGame();
   }
+  if (mouseDown && !restartClickWasDown
+      && (gameState[STATE_MODE] === MODE_DEAD || gameState[STATE_MODE] === MODE_GAME_OVER)
+      && pointer_over_gameobject(overlayButton1)) {
+    restartGame();
+  }
+  if (mouseDown && !restartClickWasDown
+      && (gameState[STATE_MODE] === MODE_DEAD || gameState[STATE_MODE] === MODE_GAME_OVER || gameState[STATE_MODE] === MODE_WIN)
+      && pointer_over_gameobject(overlayButton2)) {
+    openLevelSelection();
+  }
+  restartClickWasDown = mouseDown;
   resetKeyWasDown = reset;
   playerCrouching = down && playerOnGround && playerState > 0;
   const powerupActive = gameState[STATE_POWERUP_TIMER] > 0;
@@ -1408,6 +1443,9 @@ function updateOverlay() {
     update_text(overlayChoice1, '1  WORLD 1-1   GREEN HILLS');
     update_text(overlayChoice2, '2  WORLD 1-2   BRICK CANYON');
     update_text(overlayChoice3, '3  WORLD 1-3   CASTLE RUN');
+    update_position(overlayButton1, [480, 325]);
+    update_position(overlayButton2, [480, 365]);
+    update_position(overlayButton3, [480, 405]);
     update_position(overlayTitle, [480, 205]);
     update_position(overlayBody, [480, 260]);
     update_position(overlayChoice1, [480, 325]);
@@ -1420,6 +1458,9 @@ function updateOverlay() {
     update_text(overlayChoice1, mode === MODE_WIN ? 'BONUS: ' + stringify(gameState[STATE_COINS] * COIN_SCORE) : 'R  RESTART LEVEL');
     update_text(overlayChoice2, 'L  SELECT LEVEL');
     update_text(overlayChoice3, mode === MODE_DEAD ? 'LIVES LEFT  ' + stringify(gameState[STATE_LIVES]) : 'CHOOSE ANOTHER LEVEL');
+    update_position(overlayButton1, [480, 325]);
+    update_position(overlayButton2, [480, 365]);
+    update_position(overlayButton3, [480, 405]);
     update_position(overlayTitle, [480, 205]);
     update_position(overlayBody, [480, 260]);
     update_position(overlayChoice1, [480, 325]);
@@ -1427,6 +1468,9 @@ function updateOverlay() {
     update_position(overlayChoice3, [480, 405]);
   } else {
     update_position(overlayPanel, [-1000, -1000]);
+    update_position(overlayButton1, [-1000, -1000]);
+    update_position(overlayButton2, [-1000, -1000]);
+    update_position(overlayButton3, [-1000, -1000]);
     update_position(overlayTitle, [-1000, -1000]);
     update_position(overlayBody, [-1000, -1000]);
     update_position(overlayChoice1, [-1000, -1000]);
