@@ -5,6 +5,7 @@
 ## 文件
 
 - `SUPER_MARIO_FINAL_V3.js`：完整游戏代码，包含碰撞、金币、蘑菇、问号方块、敌人、食人花和音效逻辑。
+- `SUPER_MARIO_EXTERNAL_AUDIO.js`：使用 GitHub Raw WAV 链接和 `arcade_2d` 音频 API 的完整游戏版本。
 - `audio/README.md`：外部音频文件的目录和 Raw URL 说明。
 
 ## Source Academy 设置
