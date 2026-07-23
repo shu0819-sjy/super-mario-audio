@@ -15,4 +15,4 @@
 
 仓库地址确定后，音频链接格式为：
 
-`https://raw.githubusercontent.com/shu0819-sjy/super-mario-audio/main/audio/<文件名>`
+`https://raw.githubusercontent.com/shu0819-sjy/super-mario-audio/master/audio/<文件名>`
