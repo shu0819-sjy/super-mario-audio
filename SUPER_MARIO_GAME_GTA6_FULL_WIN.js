@@ -8,6 +8,7 @@ import {
   update_text,
   update_scale,
   update_rotation,
+  update_to_top,
   query_position,
   input_key_down,
   input_left_mouse_down,
@@ -1498,11 +1499,11 @@ function initializeVictoryScene() {
     [7, 9, 11, 255]
   );
   const cardSettings = [
-    [170, 145, 0.16, -0.18, 0.3],
-    [790, 145, 0.16, 0.16, 1.8],
-    [185, 410, 0.16, -0.10, 2.9],
-    [775, 410, 0.16, 0.10, 4.4],
-    [480, 285, 0.30, 0, 0]
+    [150, 135, 0.11, -0.16, 0.3],
+    [810, 135, 0.11, 0.16, 1.8],
+    [150, 405, 0.11, -0.09, 2.9],
+    [810, 405, 0.11, 0.09, 4.4],
+    [480, 270, 0.23, 0, 0]
   ];
   for (let i = 0; i < array_length(cardSettings); i = i + 1) {
     const setting = cardSettings[i];
@@ -1527,6 +1528,7 @@ function updateVictoryScene() {
   if (gameState[STATE_MODE] === MODE_WIN) {
     const time = get_loop_count() / FRAME_RATE;
     update_position(victoryBackdrop, [GAME_WIDTH / 2, GAME_HEIGHT / 2]);
+    update_to_top(victoryBackdrop);
     for (let i = 0; i < array_length(victoryCards); i = i + 1) {
       const cardData = victoryCards[i];
       const card = cardData[0];
@@ -1539,15 +1541,18 @@ function updateVictoryScene() {
       const driftX = (isCenter ? 5 : 12) * math_sin(time * 1.4 + phase);
       const driftY = (isCenter ? 4 : 9) * math_cos(time * 1.1 + phase);
       const scale = baseScale + (isCenter ? 0.012 : 0.008) * math_sin(time * 1.8 + phase);
-      const rotation = baseRotation + 0.035 * math_sin(time * 1.5 + phase);
+    const rotation = baseRotation + 0.035 * math_sin(time * 1.5 + phase);
       update_position(card, [baseX + driftX, baseY + driftY]);
       update_scale(card, [scale, scale]);
       update_rotation(card, rotation);
+      update_to_top(card);
     }
-    update_position(victoryTitle, [480, 55]);
-    update_text(victoryTitle, 'RETRO RECONSTRUCTION PLAYER');
-    update_position(victorySubtitle, [480, 515]);
+    update_position(victoryTitle, [35, 35]);
+    update_text(victoryTitle, 'RETRO RECONSTRUCTION');
+    update_to_top(victoryTitle);
+    update_position(victorySubtitle, [35, 515]);
     update_text(victorySubtitle, 'GTA VI COVER   MUSIC PLAYING');
+    update_to_top(victorySubtitle);
   } else {
     update_position(victoryBackdrop, [-1000, -1000]);
     for (let i = 0; i < array_length(victoryCards); i = i + 1) {
@@ -1562,7 +1567,7 @@ function updateVictoryScene() {
 /** 每帧更新完整游戏逻辑。 */
 function updateGame(currentGameState) {
   // 游戏画布建立后再启动背景音乐，避免 fullSong() 阻塞 build_game()。
-  if (!backgroundMusicStarted) {
+  if (!backgroundMusicStarted && gameState[STATE_MODE] === MODE_PLAYING) {
     startBackgroundMusic();
   }
   previousPlayerPosition[0] = playerPosition[0];
