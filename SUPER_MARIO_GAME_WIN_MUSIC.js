@@ -38,16 +38,17 @@ const marioDeathAudio = create_audio(AUDIO_BASE_URL + 'mario-death.wav', 0.8);
 const powerUpAudio = create_audio(AUDIO_BASE_URL + 'power-up.wav', 0.8);
 const extraLifeAudio = create_audio(AUDIO_BASE_URL + 'extra-life.wav', 0.8);
 let backgroundMusicStarted = false;
+let backgroundMusicPlaying = backgroundMusicAudio;
 function startBackgroundMusic() {
   if (!backgroundMusicStarted) {
-    play_audio(backgroundMusicAudio);
+    backgroundMusicPlaying = play_audio(backgroundMusicAudio);
     backgroundMusicStarted = true;
   }
   return undefined;
 }
 function stopBackgroundMusic() {
   if (backgroundMusicStarted) {
-    stop_audio(backgroundMusicAudio);
+    stop_audio(backgroundMusicPlaying);
     backgroundMusicStarted = false;
   }
   return undefined;
