@@ -108,6 +108,8 @@ const POWERUP_SCORE = 1000;
 const STOMP_SCORE = 100;
 const FIREBALL_SPEED = 10;
 const ENEMY_SPEED = 1.35;
+const KOOPA_SPEED = 1.05;
+const BUZZY_SPEED = 1.6;
 const FRAME_RATE = 30;
 const COLLISION_TOLERANCE = 6;
 const COIN_PICKUP_RADIUS = 24;
@@ -396,10 +398,37 @@ function createGoombaVisual(x, y) {
 }
 
 /** 创建会巡逻的 Goomba。 */
-function registerEnemy(x, y) {
-  const parts = createGoombaVisual(x, y);
-  const record = makeRecord(parts[0], x, y, 32, 30, 'goomba', parts);
-  record[RECORD_VELOCITY_X] = -ENEMY_SPEED;
+// 功能：创建绿色 Koopa 的像素部件；入参：世界坐标 x、y；返回：视觉部件数组；边界：允许坐标暂时在屏幕外。
+function createKoopaVisual(x, y) {
+  const shell = update_color(update_position(create_rectangle(30, 23), [x - cameraX, y - 3]), [42, 157, 75, 255]);
+  const shellBand = update_color(update_position(create_rectangle(24, 5), [x - cameraX, y + 3]), [238, 207, 56, 255]);
+  const head = update_color(update_position(create_rectangle(17, 14), [x - cameraX + 13, y - 12]), [247, 191, 105, 255]);
+  const eye = update_color(update_position(create_rectangle(4, 5), [x - cameraX + 16, y - 15]), [20, 30, 25, 255]);
+  const footLeft = update_color(update_position(create_rectangle(12, 5), [x - cameraX - 7, y + 15]), [112, 67, 37, 255]);
+  const footRight = update_color(update_position(create_rectangle(12, 5), [x - cameraX + 9, y + 15]), [112, 67, 37, 255]);
+  return [shell, shellBand, head, eye, footLeft, footRight];
+}
+
+// 功能：创建深色 Buzzy Beetle 的像素部件；入参：世界坐标 x、y；返回：视觉部件数组；边界：允许坐标暂时在屏幕外。
+function createBuzzyVisual(x, y) {
+  const shell = update_color(update_position(create_rectangle(31, 22), [x - cameraX, y - 3]), [48, 65, 78, 255]);
+  const shellHighlight = update_color(update_position(create_rectangle(20, 5), [x - cameraX, y - 8]), [93, 126, 141, 255]);
+  const face = update_color(update_position(create_rectangle(25, 11), [x - cameraX, y + 10]), [30, 39, 49, 255]);
+  const eyeLeft = update_color(update_position(create_rectangle(4, 5), [x - cameraX - 7, y + 8]), [247, 239, 170, 255]);
+  const eyeRight = update_color(update_position(create_rectangle(4, 5), [x - cameraX + 7, y + 8]), [247, 239, 170, 255]);
+  return [shell, shellHighlight, face, eyeLeft, eyeRight];
+}
+
+// 功能：注册可巡逻敌人；入参：世界坐标 x、y 和类型；返回：敌人记录；边界：未知类型回退为 Goomba。
+function registerEnemy(x, y, enemyType) {
+  const actualType = enemyType === 'koopa' || enemyType === 'buzzy' ? enemyType : 'goomba';
+  const parts = actualType === 'koopa'
+    ? createKoopaVisual(x, y)
+    : actualType === 'buzzy' ? createBuzzyVisual(x, y) : createGoombaVisual(x, y);
+  const record = makeRecord(parts[0], x, y, 32, 30, actualType, parts);
+  record[RECORD_VELOCITY_X] = actualType === 'koopa'
+    ? -KOOPA_SPEED
+    : actualType === 'buzzy' ? -BUZZY_SPEED : -ENEMY_SPEED;
   enemyObjects[array_length(enemyObjects)] = record;
   return record;
 }
@@ -449,6 +478,7 @@ function registerFinish(x, y) {
 /** 创建玩家像素角色。 */
 function createPlayerVisual() {
   const hat = update_color(update_position(create_rectangle(34, 8), [0, 0]), [207, 42, 44, 255]);
+  const capBrim = update_color(update_position(create_rectangle(42, 5), [0, 0]), [207, 42, 44, 255]);
   const hatBand = update_color(update_position(create_rectangle(31, 4), [0, 0]), [145, 28, 35, 255]);
   const face = update_color(update_position(create_rectangle(25, 17), [0, 0]), [255, 184, 126, 255]);
   const earLeft = update_color(update_position(create_rectangle(5, 8), [0, 0]), [224, 143, 94, 255]);
@@ -467,6 +497,10 @@ function createPlayerVisual() {
   const overalls = update_color(update_position(create_rectangle(22, 15), [0, 0]), [39, 91, 191, 255]);
   const shoeLeft = update_color(update_position(create_rectangle(14, 6), [0, 0]), [81, 46, 34, 255]);
   const shoeRight = update_color(update_position(create_rectangle(14, 6), [0, 0]), [81, 46, 34, 255]);
+  const armLeft = update_color(update_position(create_rectangle(8, 14), [0, 0]), [207, 42, 44, 255]);
+  const armRight = update_color(update_position(create_rectangle(8, 14), [0, 0]), [207, 42, 44, 255]);
+  const gloveLeft = update_color(update_position(create_rectangle(9, 8), [0, 0]), [255, 255, 255, 255]);
+  const gloveRight = update_color(update_position(create_rectangle(9, 8), [0, 0]), [255, 255, 255, 255]);
   playerVisualParts[0] = hat;
   playerVisualParts[1] = hatBand;
   playerVisualParts[2] = face;
@@ -486,6 +520,11 @@ function createPlayerVisual() {
   playerVisualParts[16] = overalls;
   playerVisualParts[17] = shoeLeft;
   playerVisualParts[18] = shoeRight;
+  playerVisualParts[19] = capBrim;
+  playerVisualParts[20] = armLeft;
+  playerVisualParts[21] = armRight;
+  playerVisualParts[22] = gloveLeft;
+  playerVisualParts[23] = gloveRight;
 }
 
 /** 更新玩家像素角色的位置和成长形态颜色。 */
@@ -494,6 +533,7 @@ function updatePlayerVisual() {
   const y = playerPosition[1];
   const crouchOffset = playerCrouching ? 8 : 0;
   update_position(playerVisualParts[0], [x, y - 25 + crouchOffset]);
+  update_position(playerVisualParts[19], [x + 3, y - 20 + crouchOffset]);
   update_position(playerVisualParts[1], [x, y - 22 + crouchOffset]);
   update_position(playerVisualParts[2], [x, y - 13 + crouchOffset]);
   update_position(playerVisualParts[3], [x - 14, y - 13 + crouchOffset]);
@@ -512,6 +552,10 @@ function updatePlayerVisual() {
   update_position(playerVisualParts[16], [x, y + 11 + crouchOffset]);
   update_position(playerVisualParts[17], [x - 8, y + 21 + crouchOffset]);
   update_position(playerVisualParts[18], [x + 8, y + 21 + crouchOffset]);
+  update_position(playerVisualParts[20], [x - 18, y + 1 + crouchOffset]);
+  update_position(playerVisualParts[21], [x + 18, y + 1 + crouchOffset]);
+  update_position(playerVisualParts[22], [x - 19, y + 9 + crouchOffset]);
+  update_position(playerVisualParts[23], [x + 19, y + 9 + crouchOffset]);
   if (playerState === 2) {
     update_color(playerVisualParts[15], [255, 255, 255, 255]);
   } else {
@@ -535,11 +579,26 @@ function updateEnemyVisual(enemy) {
   }
   const x = enemy[RECORD_X] - cameraX;
   const y = enemy[RECORD_Y];
-  update_position(parts[0], [x, y - 8]);
-  update_position(parts[1], [x, y + 9]);
-  update_position(parts[2], [x - 8, y - 8]);
-  update_position(parts[3], [x + 8, y - 8]);
-  update_position(parts[4], [x, y + 18]);
+  if (enemy[RECORD_TYPE] === 'koopa') {
+    update_position(parts[0], [x, y - 3]);
+    update_position(parts[1], [x, y + 3]);
+    update_position(parts[2], [x + 13, y - 12]);
+    update_position(parts[3], [x + 16, y - 15]);
+    update_position(parts[4], [x - 7, y + 15]);
+    update_position(parts[5], [x + 9, y + 15]);
+  } else if (enemy[RECORD_TYPE] === 'buzzy') {
+    update_position(parts[0], [x, y - 3]);
+    update_position(parts[1], [x, y - 8]);
+    update_position(parts[2], [x, y + 10]);
+    update_position(parts[3], [x - 7, y + 8]);
+    update_position(parts[4], [x + 7, y + 8]);
+  } else {
+    update_position(parts[0], [x, y - 8]);
+    update_position(parts[1], [x, y + 9]);
+    update_position(parts[2], [x - 8, y - 8]);
+    update_position(parts[3], [x + 8, y - 8]);
+    update_position(parts[4], [x, y + 18]);
+  }
 }
 
 /** 更新金币、道具和旗杆的部件位置。 */
@@ -763,15 +822,15 @@ function initializeLevel() {
   registerPowerup(7996, 330, 'mushroom');
 
   registerEnemy(760, 458);
-  registerEnemy(1150, 458);
-  registerEnemy(1970, 458);
-  registerEnemy(2700, 458);
+  registerEnemy(1150, 458, 'koopa');
+  registerEnemy(1970, 458, 'buzzy');
+  registerEnemy(2700, 458, 'koopa');
   registerEnemy(4150, 458);
-  registerEnemy(4790, 458);
-  registerEnemy(6100, 458);
-  registerEnemy(7250, 458);
+  registerEnemy(4790, 458, 'buzzy');
+  registerEnemy(6100, 458, 'koopa');
+  registerEnemy(7250, 458, 'buzzy');
   registerEnemy(8040, 458);
-  registerEnemy(8700, 458);
+  registerEnemy(8700, 458, 'koopa');
 
   registerFinish(9150, 410);
   initializeLevelVariant();
@@ -791,7 +850,7 @@ function initializeLevelVariant() {
     registerCoin(2864, 310, false);
     registerCoin(2896, 310, false);
     registerEnemy(2760, 458);
-    registerEnemy(3050, 458);
+    registerEnemy(3050, 458, 'buzzy');
   } else if (currentLevel === 3) {
     registerGroundSegment(1500, 210);
     registerGroundSegment(3560, 260);
@@ -806,7 +865,7 @@ function initializeLevelVariant() {
     registerCoin(3364, 260, false);
     registerCoin(3396, 260, false);
     registerEnemy(3220, 458);
-    registerEnemy(3500, 458);
+    registerEnemy(3500, 458, 'koopa');
     registerEnemy(3650, 458);
   }
 }
