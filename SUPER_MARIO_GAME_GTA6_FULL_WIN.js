@@ -389,34 +389,37 @@ function spawnPowerup(x, y, powerType) {
 
 /** 创建 Goomba 的像素视觉。 */
 function createGoombaVisual(x, y) {
+  const outline = update_color(update_position(create_rectangle(36, 29), [x - cameraX, y + 3]), [58, 31, 25, 255]);
   const head = update_color(update_position(create_rectangle(30, 18), [x - cameraX, y - 8]), [151, 81, 43, 255]);
   const body = update_color(update_position(create_rectangle(25, 13), [x - cameraX, y + 9]), [126, 67, 38, 255]);
   const eyeLeft = update_color(update_position(create_rectangle(6, 8), [x - cameraX - 8, y - 8]), [255, 255, 230, 255]);
   const eyeRight = update_color(update_position(create_rectangle(6, 8), [x - cameraX + 8, y - 8]), [255, 255, 230, 255]);
   const feet = update_color(update_position(create_rectangle(35, 5), [x - cameraX, y + 18]), [72, 38, 27, 255]);
-  return [head, body, eyeLeft, eyeRight, feet];
+  return [outline, head, body, eyeLeft, eyeRight, feet];
 }
 
 /** 创建会巡逻的 Goomba。 */
 // 功能：创建绿色 Koopa 的像素部件；入参：世界坐标 x、y；返回：视觉部件数组；边界：允许坐标暂时在屏幕外。
 function createKoopaVisual(x, y) {
+  const outline = update_color(update_position(create_rectangle(36, 30), [x - cameraX, y + 2]), [25, 63, 38, 255]);
   const shell = update_color(update_position(create_rectangle(30, 23), [x - cameraX, y - 3]), [42, 157, 75, 255]);
   const shellBand = update_color(update_position(create_rectangle(24, 5), [x - cameraX, y + 3]), [238, 207, 56, 255]);
   const head = update_color(update_position(create_rectangle(17, 14), [x - cameraX + 13, y - 12]), [247, 191, 105, 255]);
   const eye = update_color(update_position(create_rectangle(4, 5), [x - cameraX + 16, y - 15]), [20, 30, 25, 255]);
   const footLeft = update_color(update_position(create_rectangle(12, 5), [x - cameraX - 7, y + 15]), [112, 67, 37, 255]);
   const footRight = update_color(update_position(create_rectangle(12, 5), [x - cameraX + 9, y + 15]), [112, 67, 37, 255]);
-  return [shell, shellBand, head, eye, footLeft, footRight];
+  return [outline, shell, shellBand, head, eye, footLeft, footRight];
 }
 
 // 功能：创建深色 Buzzy Beetle 的像素部件；入参：世界坐标 x、y；返回：视觉部件数组；边界：允许坐标暂时在屏幕外。
 function createBuzzyVisual(x, y) {
+  const outline = update_color(update_position(create_rectangle(37, 29), [x - cameraX, y + 2]), [12, 17, 24, 255]);
   const shell = update_color(update_position(create_rectangle(31, 22), [x - cameraX, y - 3]), [48, 65, 78, 255]);
   const shellHighlight = update_color(update_position(create_rectangle(20, 5), [x - cameraX, y - 8]), [93, 126, 141, 255]);
   const face = update_color(update_position(create_rectangle(25, 11), [x - cameraX, y + 10]), [30, 39, 49, 255]);
   const eyeLeft = update_color(update_position(create_rectangle(4, 5), [x - cameraX - 7, y + 8]), [247, 239, 170, 255]);
   const eyeRight = update_color(update_position(create_rectangle(4, 5), [x - cameraX + 7, y + 8]), [247, 239, 170, 255]);
-  return [shell, shellHighlight, face, eyeLeft, eyeRight];
+  return [outline, shell, shellHighlight, face, eyeLeft, eyeRight];
 }
 
 // 功能：注册可巡逻敌人；入参：世界坐标 x、y 和类型；返回：敌人记录；边界：未知类型回退为 Goomba。
@@ -477,6 +480,11 @@ function registerFinish(x, y) {
 
 /** 创建玩家像素角色。 */
 function createPlayerVisual() {
+  const headOutline = update_color(update_position(create_rectangle(31, 22), [0, 0]), [38, 25, 24, 255]);
+  const bodyOutline = update_color(update_position(create_rectangle(31, 21), [0, 0]), [38, 25, 24, 255]);
+  const legOutline = update_color(update_position(create_rectangle(26, 19), [0, 0]), [38, 25, 24, 255]);
+  const shoeOutlineLeft = update_color(update_position(create_rectangle(17, 9), [0, 0]), [38, 25, 24, 255]);
+  const shoeOutlineRight = update_color(update_position(create_rectangle(17, 9), [0, 0]), [38, 25, 24, 255]);
   const hat = update_color(update_position(create_rectangle(34, 8), [0, 0]), [207, 42, 44, 255]);
   const capBrim = update_color(update_position(create_rectangle(42, 5), [0, 0]), [207, 42, 44, 255]);
   const hatBand = update_color(update_position(create_rectangle(31, 4), [0, 0]), [145, 28, 35, 255]);
@@ -525,6 +533,11 @@ function createPlayerVisual() {
   playerVisualParts[21] = armRight;
   playerVisualParts[22] = gloveLeft;
   playerVisualParts[23] = gloveRight;
+  playerVisualParts[24] = headOutline;
+  playerVisualParts[25] = bodyOutline;
+  playerVisualParts[26] = legOutline;
+  playerVisualParts[27] = shoeOutlineLeft;
+  playerVisualParts[28] = shoeOutlineRight;
 }
 
 /** 更新玩家像素角色的位置和成长形态颜色。 */
@@ -533,6 +546,11 @@ function updatePlayerVisual() {
   const y = playerPosition[1];
   const crouchOffset = playerCrouching ? 8 : 0;
   update_position(playerVisualParts[0], [x, y - 25 + crouchOffset]);
+  update_position(playerVisualParts[24], [x, y - 13 + crouchOffset]);
+  update_position(playerVisualParts[25], [x, y + 1 + crouchOffset]);
+  update_position(playerVisualParts[26], [x, y + 11 + crouchOffset]);
+  update_position(playerVisualParts[27], [x - 8, y + 21 + crouchOffset]);
+  update_position(playerVisualParts[28], [x + 8, y + 21 + crouchOffset]);
   update_position(playerVisualParts[19], [x + 3, y - 20 + crouchOffset]);
   update_position(playerVisualParts[1], [x, y - 22 + crouchOffset]);
   update_position(playerVisualParts[2], [x, y - 13 + crouchOffset]);
@@ -580,24 +598,27 @@ function updateEnemyVisual(enemy) {
   const x = enemy[RECORD_X] - cameraX;
   const y = enemy[RECORD_Y];
   if (enemy[RECORD_TYPE] === 'koopa') {
-    update_position(parts[0], [x, y - 3]);
-    update_position(parts[1], [x, y + 3]);
-    update_position(parts[2], [x + 13, y - 12]);
-    update_position(parts[3], [x + 16, y - 15]);
-    update_position(parts[4], [x - 7, y + 15]);
-    update_position(parts[5], [x + 9, y + 15]);
+    update_position(parts[0], [x, y + 2]);
+    update_position(parts[1], [x, y - 3]);
+    update_position(parts[2], [x, y + 3]);
+    update_position(parts[3], [x + 13, y - 12]);
+    update_position(parts[4], [x + 16, y - 15]);
+    update_position(parts[5], [x - 7, y + 15]);
+    update_position(parts[6], [x + 9, y + 15]);
   } else if (enemy[RECORD_TYPE] === 'buzzy') {
-    update_position(parts[0], [x, y - 3]);
-    update_position(parts[1], [x, y - 8]);
-    update_position(parts[2], [x, y + 10]);
-    update_position(parts[3], [x - 7, y + 8]);
-    update_position(parts[4], [x + 7, y + 8]);
+    update_position(parts[0], [x, y + 2]);
+    update_position(parts[1], [x, y - 3]);
+    update_position(parts[2], [x, y - 8]);
+    update_position(parts[3], [x, y + 10]);
+    update_position(parts[4], [x - 7, y + 8]);
+    update_position(parts[5], [x + 7, y + 8]);
   } else {
-    update_position(parts[0], [x, y - 8]);
-    update_position(parts[1], [x, y + 9]);
-    update_position(parts[2], [x - 8, y - 8]);
-    update_position(parts[3], [x + 8, y - 8]);
-    update_position(parts[4], [x, y + 18]);
+    update_position(parts[0], [x, y + 3]);
+    update_position(parts[1], [x, y - 8]);
+    update_position(parts[2], [x, y + 9]);
+    update_position(parts[3], [x - 8, y - 8]);
+    update_position(parts[4], [x + 8, y - 8]);
+    update_position(parts[5], [x, y + 18]);
   }
 }
 
