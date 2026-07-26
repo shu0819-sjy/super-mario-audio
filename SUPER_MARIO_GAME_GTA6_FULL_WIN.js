@@ -1579,11 +1579,11 @@ function initializeVictoryScene() {
     [7, 9, 11, 255]
   );
   const cardSettings = [
-    [125, 115, 0.075, -0.16, 0.3],
-    [835, 115, 0.075, 0.16, 1.8],
-    [125, 425, 0.075, -0.09, 2.9],
-    [835, 425, 0.075, 0.09, 4.4],
-    [480, 270, 0.17, 0, 0]
+    [250, 125, 0.075, -0.12, 0.3],
+    [710, 125, 0.075, 0.12, 1.8],
+    [250, 415, 0.075, -0.07, 2.9],
+    [710, 415, 0.075, 0.07, 4.4],
+    [480, 270, 0.14, 0, 0]
   ];
   for (let i = 0; i < array_length(cardSettings); i = i + 1) {
     const setting = cardSettings[i];
@@ -1618,10 +1618,10 @@ function updateVictoryScene() {
       const baseRotation = cardData[4];
       const phase = cardData[5];
       const isCenter = i === 4;
-      const driftX = (isCenter ? 5 : 12) * math_sin(time * 1.4 + phase);
-      const driftY = (isCenter ? 4 : 9) * math_cos(time * 1.1 + phase);
-      const scale = baseScale + (isCenter ? 0.012 : 0.008) * math_sin(time * 1.8 + phase);
-      const rotation = baseRotation + 0.035 * math_sin(time * 1.5 + phase);
+      const driftX = (isCenter ? 3 : 5) * math_sin(time * 1.4 + phase);
+      const driftY = (isCenter ? 3 : 5) * math_cos(time * 1.1 + phase);
+      const scale = baseScale + (isCenter ? 0.008 : 0.004) * math_sin(time * 1.8 + phase);
+      const rotation = baseRotation + 0.022 * math_sin(time * 1.5 + phase);
       update_position(card, [baseX + driftX, baseY + driftY]);
       update_scale(card, [scale, scale]);
       update_rotation(card, rotation);
