@@ -1495,15 +1495,15 @@ function updateOverlay() {
  */
 function initializeVictoryScene() {
   victoryBackdrop = update_color(
-    update_position(create_rectangle(GAME_WIDTH, GAME_HEIGHT), [-1000, -1000]),
+    update_position(create_rectangle(GAME_WIDTH + 480, GAME_HEIGHT + 360), [-1000, -1000]),
     [7, 9, 11, 255]
   );
   const cardSettings = [
-    [150, 135, 0.11, -0.16, 0.3],
-    [810, 135, 0.11, 0.16, 1.8],
-    [150, 405, 0.11, -0.09, 2.9],
-    [810, 405, 0.11, 0.09, 4.4],
-    [480, 270, 0.23, 0, 0]
+    [125, 115, 0.075, -0.16, 0.3],
+    [835, 115, 0.075, 0.16, 1.8],
+    [125, 425, 0.075, -0.09, 2.9],
+    [835, 425, 0.075, 0.09, 4.4],
+    [480, 270, 0.17, 0, 0]
   ];
   for (let i = 0; i < array_length(cardSettings); i = i + 1) {
     const setting = cardSettings[i];
@@ -1541,18 +1541,14 @@ function updateVictoryScene() {
       const driftX = (isCenter ? 5 : 12) * math_sin(time * 1.4 + phase);
       const driftY = (isCenter ? 4 : 9) * math_cos(time * 1.1 + phase);
       const scale = baseScale + (isCenter ? 0.012 : 0.008) * math_sin(time * 1.8 + phase);
-    const rotation = baseRotation + 0.035 * math_sin(time * 1.5 + phase);
+      const rotation = baseRotation + 0.035 * math_sin(time * 1.5 + phase);
       update_position(card, [baseX + driftX, baseY + driftY]);
       update_scale(card, [scale, scale]);
       update_rotation(card, rotation);
       update_to_top(card);
     }
-    update_position(victoryTitle, [35, 35]);
-    update_text(victoryTitle, 'RETRO RECONSTRUCTION');
-    update_to_top(victoryTitle);
-    update_position(victorySubtitle, [35, 515]);
-    update_text(victorySubtitle, 'GTA VI COVER   MUSIC PLAYING');
-    update_to_top(victorySubtitle);
+    update_position(victoryTitle, [-1000, -1000]);
+    update_position(victorySubtitle, [-1000, -1000]);
   } else {
     update_position(victoryBackdrop, [-1000, -1000]);
     for (let i = 0; i < array_length(victoryCards); i = i + 1) {
