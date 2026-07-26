@@ -842,15 +842,15 @@ function initializeLevel() {
   registerPowerup(5964, 340, 'flower');
   registerPowerup(7996, 330, 'mushroom');
 
-  registerEnemy(760, 458);
+  registerEnemy(760, 458, 'goomba');
   registerEnemy(1150, 458, 'koopa');
   registerEnemy(1970, 458, 'buzzy');
   registerEnemy(2700, 458, 'koopa');
-  registerEnemy(4150, 458);
+  registerEnemy(4150, 458, 'goomba');
   registerEnemy(4790, 458, 'buzzy');
   registerEnemy(6100, 458, 'koopa');
   registerEnemy(7250, 458, 'buzzy');
-  registerEnemy(8040, 458);
+  registerEnemy(8040, 458, 'goomba');
   registerEnemy(8700, 458, 'koopa');
 
   registerFinish(9150, 410);
@@ -870,7 +870,7 @@ function initializeLevelVariant() {
     registerCoin(2832, 310, false);
     registerCoin(2864, 310, false);
     registerCoin(2896, 310, false);
-    registerEnemy(2760, 458);
+    registerEnemy(2760, 458, 'goomba');
     registerEnemy(3050, 458, 'buzzy');
   } else if (currentLevel === 3) {
     registerGroundSegment(1500, 210);
@@ -885,9 +885,9 @@ function initializeLevelVariant() {
     registerCoin(3332, 260, false);
     registerCoin(3364, 260, false);
     registerCoin(3396, 260, false);
-    registerEnemy(3220, 458);
+    registerEnemy(3220, 458, 'goomba');
     registerEnemy(3500, 458, 'koopa');
-    registerEnemy(3650, 458);
+    registerEnemy(3650, 458, 'goomba');
   }
 }
 
