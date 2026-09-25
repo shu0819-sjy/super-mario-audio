@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Syntax-check all game programs
+        shell: bash
+        run: |
+          fail=0
+          for f in *.js; do
+            echo "checking $f"
+            node --check "$f" || fail=1
+          done
+          exit $fail

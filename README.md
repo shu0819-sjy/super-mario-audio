@@ -1,19 +1,65 @@
-# Super Mario Source Academy
+# super-mario-audio
 
-这是 Source Academy Arcade2D 超级玛丽项目。
+[![CI](https://github.com/shu0819-sjy/super-mario-audio/actions/workflows/ci.yml/badge.svg)](https://github.com/shu0819-sjy/super-mario-audio/actions/workflows/ci.yml)
 
-## 文件
+A Source Academy **Arcade2D** Super Mario learning project with optional external WAV playback.
 
-- `SUPER_MARIO_FINAL_V3.js`：完整游戏代码，包含碰撞、金币、蘑菇、问号方块、敌人、食人花和音效逻辑。
-- `SUPER_MARIO_EXTERNAL_AUDIO.js`：使用 GitHub Raw WAV 链接和 `arcade_2d` 音频 API 的完整游戏版本。
-- `audio/README.md`：外部音频文件的目录和 Raw URL 说明。
+This is a course-style demo, not a commercial engine rewrite. Most variants are single-file Source programs you paste into the Source Academy editor.
 
-## Source Academy 设置
+## Requirements
 
-使用 Source §3 或更高版本，并启用 `arcade_2d`。当前代码保留自定义 `sound` 音符实现；如果加入实际音频文件，可以使用 `arcade_2d.create_audio`、`loop_audio`、`play_audio` 和 `stop_audio`。
+- [Source Academy](https://sourceacademy.org/) with **Source §3** (or newer)
+- Enable the **`arcade_2d`** module
+- For synthesized BGM variants, also enable the **`sound`** module
+- For curve demos, enable the **`curve`** module
 
-## GitHub Raw URL
+## Quick start (recommended)
 
-仓库地址确定后，音频链接格式为：
+1. Open Source Academy and create a Source §3 playground with `arcade_2d` enabled.
+2. Copy the contents of [`SUPER_MARIO_EXTERNAL_AUDIO.js`](./SUPER_MARIO_EXTERNAL_AUDIO.js).
+3. Run the program. Audio loads from this repo's Raw URLs under `main/audio/`.
 
-`https://raw.githubusercontent.com/shu0819-sjy/super-mario-audio/master/audio/<文件名>`
+Controls (shown in-game):
+
+| Key | Action |
+|---|---|
+| `A` / `D` | Move |
+| `Space` | Jump |
+| `S` | Crouch |
+| `Q` | Fire |
+| `P` | Pause |
+
+## Scoring (as implemented)
+
+Starting state: **3 lives**, **300** time units, score/coins at zero.
+
+| Event | Points |
+|---|---|
+| Collect coin | +100 score, +1 coin |
+| Stomp enemy | +100 score |
+| Collect power-up | +1000 score |
+
+Every **100 coins** grants **+1 life** (`COINS_PER_LIFE = 100`). Reach the finish flag to enter the win overlay; run out of lives for game over.
+
+## Repository layout
+
+| Path | Role |
+|---|---|
+| `SUPER_MARIO_EXTERNAL_AUDIO.js` | Full game + GitHub Raw WAV audio (recommended) |
+| `SUPER_MARIO_FINAL_V3.js` | Full game + Source `sound` synthesized BGM |
+| `SUPER_MARIO_GAME_*.js` | Alternate win-screen / music experiments |
+| `SUPER_MARIO_CURVE_SYNC.js` | Sound + curve visualization sync demo |
+| `CURVE_VIDEO_WITH_EXTERNAL_AUDIO.js` | Short curve animation driven by a WAV |
+| `external-audio-template.js` | Minimal Raw-URL audio helper snippet |
+| `audio/` | WAV assets used by the external-audio build |
+| `audio/README.md` | Notes on placing additional audio files |
+
+Raw audio base URL used by the recommended build:
+
+```text
+https://raw.githubusercontent.com/shu0819-sjy/super-mario-audio/main/audio/
+```
+
+## License
+
+No `LICENSE` file is published in this repository yet. Treat the code and assets as source-available for personal / academic study unless a license is added later. Do not assume MIT or public-domain rights.
