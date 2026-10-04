@@ -62,4 +62,4 @@ https://raw.githubusercontent.com/shu0819-sjy/super-mario-audio/main/audio/
 
 ## License
 
-No `LICENSE` file is published in this repository yet. Treat the code and assets as source-available for personal / academic study unless a license is added later. Do not assume MIT or public-domain rights.
+This project is released under the [MIT License](./LICENSE). The license applies to the repository code and included assets unless a file or upstream dependency states otherwise. Source Academy and any third-party services or modules remain subject to their own terms.
