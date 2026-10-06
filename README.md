@@ -13,6 +13,12 @@ This is a course-style demo, not a commercial engine rewrite. Most variants are 
 - For synthesized BGM variants, also enable the **`sound`** module
 - For curve demos, enable the **`curve`** module
 
+The repository is platform-neutral: the source programs run in the browser
+through Source Academy on Windows, macOS, or Linux. GitHub Actions validates
+JavaScript syntax on all three operating systems; the actual game runtime and
+audio playback still require the Source Academy editor and browser security
+permissions.
+
 ## Quick start (recommended)
 
 1. Open Source Academy and create a Source §3 playground with `arcade_2d` enabled.
